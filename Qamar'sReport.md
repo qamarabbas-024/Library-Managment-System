@@ -8,4 +8,7 @@ In the second file utils.cpp i defined all the function.
 
 ---------------------------------------------------------------------------------------------------
 Then i created the member.h file, where i declared some member functions(add,del,list,update,ban,unban)
-this section will handle all the member details in the main function and in the program.
+
+This section will handle all the member details in the main function and in the program.
+
+The member.cpp file will handle all the CRUD functions of the members, it will read the data directly from the user.csv file
