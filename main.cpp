@@ -80,6 +80,6 @@ int main(){
     } while(choice!=0);
 
     clearScreen();
-    cout << "Project By:\nQamar Abbas\nSafi Haider\nLeeza Shehzadi\n";
+    cout << "Project By:\nQamar Abbas(25014119-024)\nSafi Haider(25014119-209)\nLeeza Shehzadi(25014119-232)\nKhuzama Aleem(25014119-053)";
     return 0;
 }
