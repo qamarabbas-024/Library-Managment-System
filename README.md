@@ -1,5 +1,6 @@
-#LIBRARY MANAGMENT SYSTEM
-                                <h1>---GROUP MEMBERS---</h1>
+<h1>LIBRARY MANAGMENT SYSTEM</h1>
+
+<h2>GROUP MEMBERS</h2>
 
 <b>Qamar Abbas (25014119-024)</b>
                                 
@@ -25,11 +26,13 @@
 
 <h3> Member Section </h3>
 
-<img src="data/MemeberSection.png" alt="Member Page"
+<img src="data/MemberSection.png" alt="Member Page"
      style="display:block; margin:auto;">
 
 
 ----------------------------------------------------------------------------------------------------
+<h1> Working</h1
+>
 <b>git clone https://github.com/qamarabbas-024/Library-Managment-System.git</b>
 
 or
