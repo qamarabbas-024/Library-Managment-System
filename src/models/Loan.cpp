@@ -1,5 +1,5 @@
-#include "models/Loan.hpp"
-#include "utils/StringUtils.hpp"
+#include "models/Loan.h"
+#include "utils/StringUtils.h"
 #include <algorithm>
 
 namespace LMS::Models {

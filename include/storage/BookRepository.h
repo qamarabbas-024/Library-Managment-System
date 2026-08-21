@@ -1,7 +1,7 @@
 #pragma once
 
-#include "storage/IRepository.hpp"
-#include "models/Book.hpp"
+#include "storage/IRepository.h"
+#include "models/Book.h"
 #include <string>
 #include <vector>
 #include <unordered_map>

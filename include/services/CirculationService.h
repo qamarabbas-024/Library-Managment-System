@@ -1,12 +1,12 @@
 #pragma once
 
-#include "storage/BookRepository.hpp"
-#include "storage/UserRepository.hpp"
-#include "storage/LoanRepository.hpp"
-#include "storage/ReservationRepository.hpp"
-#include "storage/AuditLogger.hpp"
-#include "models/Loan.hpp"
-#include "models/Reservation.hpp"
+#include "storage/BookRepository.h"
+#include "storage/UserRepository.h"
+#include "storage/LoanRepository.h"
+#include "storage/ReservationRepository.h"
+#include "storage/AuditLogger.h"
+#include "models/Loan.h"
+#include "models/Reservation.h"
 #include <memory>
 #include <string>
 #include <vector>

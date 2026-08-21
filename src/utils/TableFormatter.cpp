@@ -1,6 +1,6 @@
-#include "utils/TableFormatter.hpp"
-#include "utils/StringUtils.hpp"
-#include "utils/Terminal.hpp"
+#include "utils/TableFormatter.h"
+#include "utils/StringUtils.h"
+#include "utils/Terminal.h"
 #include <sstream>
 #include <algorithm>
 

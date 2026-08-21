@@ -1,11 +1,11 @@
 #pragma once
 
-#include "services/AuthService.hpp"
-#include "services/BookService.hpp"
-#include "services/MemberService.hpp"
-#include "services/CirculationService.hpp"
-#include "services/ReportService.hpp"
-#include "services/RecommendationService.hpp"
+#include "services/AuthService.h"
+#include "services/BookService.h"
+#include "services/MemberService.h"
+#include "services/CirculationService.h"
+#include "services/ReportService.h"
+#include "services/RecommendationService.h"
 #include <memory>
 
 namespace LMS::UI {

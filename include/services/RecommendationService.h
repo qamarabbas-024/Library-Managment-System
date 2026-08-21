@@ -1,8 +1,8 @@
 #pragma once
 
-#include "storage/BookRepository.hpp"
-#include "storage/LoanRepository.hpp"
-#include "models/Book.hpp"
+#include "storage/BookRepository.h"
+#include "storage/LoanRepository.h"
+#include "models/Book.h"
 #include <memory>
 #include <vector>
 #include <string>

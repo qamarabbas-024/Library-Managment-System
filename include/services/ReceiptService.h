@@ -1,8 +1,8 @@
 #pragma once
 
-#include "models/Loan.hpp"
-#include "models/Book.hpp"
-#include "models/User.hpp"
+#include "models/Loan.h"
+#include "models/Book.h"
+#include "models/User.h"
 #include <string>
 
 namespace LMS::Services {

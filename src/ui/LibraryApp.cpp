@@ -1,9 +1,9 @@
-#include "ui/LibraryApp.hpp"
-#include "utils/Terminal.hpp"
-#include "utils/TableFormatter.hpp"
-#include "utils/StringUtils.hpp"
-#include "utils/Barcode.hpp"
-#include "services/ReceiptService.hpp"
+#include "ui/LibraryApp.h"
+#include "utils/Terminal.h"
+#include "utils/TableFormatter.h"
+#include "utils/StringUtils.h"
+#include "utils/Barcode.h"
+#include "services/ReceiptService.h"
 #include <iostream>
 #include <iomanip>
 #include <sstream>

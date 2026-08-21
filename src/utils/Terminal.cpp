@@ -1,5 +1,5 @@
-#include "utils/Terminal.hpp"
-#include "utils/StringUtils.hpp"
+#include "utils/Terminal.h"
+#include "utils/StringUtils.h"
 #include <limits>
 #include <cstdlib>
 

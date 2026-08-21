@@ -1,9 +1,9 @@
 #pragma once
 
-#include "storage/UserRepository.hpp"
-#include "storage/LoanRepository.hpp"
-#include "storage/AuditLogger.hpp"
-#include "models/User.hpp"
+#include "storage/UserRepository.h"
+#include "storage/LoanRepository.h"
+#include "storage/AuditLogger.h"
+#include "models/User.h"
 #include <memory>
 #include <string>
 #include <vector>

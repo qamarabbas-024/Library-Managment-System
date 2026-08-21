@@ -1,7 +1,7 @@
-#include "services/ReceiptService.hpp"
-#include "storage/CsvEngine.hpp"
-#include "utils/DateTime.hpp"
-#include "utils/StringUtils.hpp"
+#include "services/ReceiptService.h"
+#include "storage/CsvEngine.h"
+#include "utils/DateTime.h"
+#include "utils/StringUtils.h"
 #include <sstream>
 #include <iomanip>
 #include <fstream>

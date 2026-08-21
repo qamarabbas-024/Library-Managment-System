@@ -1,8 +1,8 @@
 #pragma once
 
-#include "storage/UserRepository.hpp"
-#include "storage/AuditLogger.hpp"
-#include "models/User.hpp"
+#include "storage/UserRepository.h"
+#include "storage/AuditLogger.h"
+#include "models/User.h"
 #include <memory>
 #include <string>
 #include <optional>

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "storage/IRepository.hpp"
-#include "models/Loan.hpp"
+#include "storage/IRepository.h"
+#include "models/Loan.h"
 #include <string>
 #include <vector>
 #include <unordered_map>

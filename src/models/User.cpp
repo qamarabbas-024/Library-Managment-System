@@ -1,5 +1,5 @@
-#include "models/User.hpp"
-#include "utils/StringUtils.hpp"
+#include "models/User.h"
+#include "utils/StringUtils.h"
 #include <algorithm>
 
 namespace LMS::Models {

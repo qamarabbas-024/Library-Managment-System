@@ -1,4 +1,4 @@
-#include "utils/StringUtils.hpp"
+#include "utils/StringUtils.h"
 #include <cctype>
 
 namespace LMS::Utils {

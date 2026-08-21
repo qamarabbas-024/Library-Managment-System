@@ -1,5 +1,5 @@
-#include "services/RecommendationService.hpp"
-#include "utils/StringUtils.hpp"
+#include "services/RecommendationService.h"
+#include "utils/StringUtils.h"
 #include <map>
 #include <set>
 #include <algorithm>

@@ -1,6 +1,6 @@
-#include "utils/Barcode.hpp"
-#include "utils/StringUtils.hpp"
-#include "utils/Terminal.hpp"
+#include "utils/Barcode.h"
+#include "utils/StringUtils.h"
+#include "utils/Terminal.h"
 #include <sstream>
 #include <iomanip>
 

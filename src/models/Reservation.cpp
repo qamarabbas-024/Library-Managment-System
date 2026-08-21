@@ -1,5 +1,5 @@
-#include "models/Reservation.hpp"
-#include "utils/StringUtils.hpp"
+#include "models/Reservation.h"
+#include "utils/StringUtils.h"
 
 namespace LMS::Models {
 
