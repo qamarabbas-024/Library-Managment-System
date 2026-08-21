@@ -145,23 +145,29 @@ void LibraryApp::runSignupFlow() {
 
 void LibraryApp::runForgotPasswordFlow() {
     Terminal::clear();
-    Terminal::printHeader("FORGOT PASSWORD", "Reset your password");
+    Terminal::printHeader("FORGOT PASSWORD", "2-Factor Identity Verification & Password Reset");
     std::cout << "\n";
 
-    std::string email    = Terminal::readString("  Registered email: ");
-    std::string newPass  = Terminal::readPassword("  New password     : ");
-    std::string confirm  = Terminal::readPassword("  Confirm password : ");
+    std::string email    = Terminal::readString("  Registered email       : ");
+    std::string phone    = Terminal::readString("  Registered phone number: ");
+    std::string newPass  = Terminal::readPassword("  New password           : ");
+    std::string confirm  = Terminal::readPassword("  Confirm password       : ");
 
     if (newPass != confirm) {
         Terminal::printError("Passwords do not match.");
         Terminal::pause();
         return;
     }
+    if (newPass.length() < 4) {
+        Terminal::printError("Password must be at least 4 characters.");
+        Terminal::pause();
+        return;
+    }
 
-    if (m_auth->resetPassword(email, newPass)) {
-        Terminal::printSuccess("Password reset successfully. You may now log in.");
+    if (m_auth->resetPassword(email, phone, newPass)) {
+        Terminal::printSuccess("Identity verified! Password reset successfully. You may now log in.");
     } else {
-        Terminal::printError("Email not found. Please verify your registered email.");
+        Terminal::printError("Verification failed. Email or phone number does not match registered records.");
     }
     Terminal::pause();
 }

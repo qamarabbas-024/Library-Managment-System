@@ -1,1 +1,3 @@
-USR-001,qamarabbas,password,qamarabbas33333333@gmail.com,03219348342,admin,active,student,2026-01-01,0,LMS_SALT_2026
+USR-001,qamarabbas,password,qamarabbas33333333@gmail.com,03219348342,admin,active,faculty,2026-01-01,0,LMS_SALT_2026
+USR-002,student1,student123,student1@uni.edu,03001234567,member,active,student,2026-01-01,0,SALT_STUDENT_01
+USR-003,prof_smith,faculty123,prof.smith@uni.edu,03009876543,member,active,faculty,2026-01-01,0,SALT_FACULTY_01

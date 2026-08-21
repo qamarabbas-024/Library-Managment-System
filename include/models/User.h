@@ -66,8 +66,9 @@ public:
 
     // Setters
     void setUsername(const std::string& u) { m_username = u; }
-    void setPasswordHash(const std::string& p) { m_passwordHash = p; }
-    void setEmail(const std::string& e) { m_email = e; }
+    void setPasswordHash(const std::string& hash) { m_passwordHash = hash; }
+    void setSalt(const std::string& salt) { m_salt = salt; }
+    void setEmail(const std::string& email) { m_email = email; }
     void setPhone(const std::string& p) { m_phone = p; }
     void setStatus(UserStatus s) { m_status = s; }
     void setRole(UserRole r) { m_role = r; }

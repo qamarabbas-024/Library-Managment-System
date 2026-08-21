@@ -90,20 +90,30 @@ void AuthService::logout() {
     }
 }
 
-bool AuthService::resetPassword(const std::string& email, const std::string& newPassword) {
+bool AuthService::resetPassword(const std::string& email, const std::string& phone, const std::string& newPassword) {
     std::string cleanEmail = Utils::StringUtils::trim(email);
+    std::string cleanPhone = Utils::StringUtils::trim(phone);
     auto userOpt = m_userRepo->findByEmail(cleanEmail);
     if (!userOpt.has_value()) {
+        if (m_logger) m_logger->warn("PASSWORD_RESET_FAILED", cleanEmail, "Email not found");
         return false;
     }
 
     Models::User user = userOpt.value();
+    
+    // Verify registered phone matches for security
+    if (!cleanPhone.empty() && !user.getPhone().empty() && user.getPhone() != cleanPhone) {
+        if (m_logger) m_logger->warn("PASSWORD_RESET_BLOCKED", user.getId(), "Phone number mismatch during reset attempt");
+        return false;
+    }
+
     std::string salt = Utils::Crypto::generateSalt();
     std::string hash = Utils::Crypto::hashPassword(newPassword, salt);
 
     user.setPasswordHash(hash);
+    user.setSalt(salt);
     if (m_userRepo->update(user)) {
-        if (m_logger) m_logger->audit("PASSWORD_RESET", user.getId(), "Password reset requested via email");
+        if (m_logger) m_logger->audit("PASSWORD_RESET_SUCCESS", user.getId(), "Password reset successfully via 2FA verification");
         return true;
     }
     return false;

@@ -36,7 +36,7 @@ public:
     bool isAdmin() const { return m_currentUser.has_value() && m_currentUser->isAdmin(); }
     const std::optional<Models::User>& getCurrentUser() const { return m_currentUser; }
 
-    bool resetPassword(const std::string& email, const std::string& newPassword);
+    bool resetPassword(const std::string& email, const std::string& phone, const std::string& newPassword);
     bool changePassword(const std::string& userId, const std::string& oldPassword, const std::string& newPassword);
 
     void refreshCurrentUser();
