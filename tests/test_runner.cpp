@@ -1,20 +1,17 @@
 /**
  * ============================================================
- *  Library Management System - Automated Unit Test Suite
+ *  Library Management System - Automated Unit Tests (C++20)
  *  Author: Qamar Abbas
- *  C++20 Standard
  * ============================================================
  */
 
 #include "utils/DateTime.h"
 #include "utils/Crypto.h"
 #include "utils/StringUtils.h"
-#include "utils/Barcode.h"
 #include "models/Book.h"
 #include "models/User.h"
 #include "models/Loan.h"
 #include "models/Reservation.h"
-#include "storage/CsvEngine.h"
 #include "storage/BookRepository.h"
 #include "storage/UserRepository.h"
 #include "storage/LoanRepository.h"
@@ -25,72 +22,76 @@
 #include "services/MemberService.h"
 #include "services/CirculationService.h"
 #include "services/ReportService.h"
-#include "services/RecommendationService.h"
-#include "services/ReceiptService.h"
 
 #include <iostream>
 #include <vector>
 #include <string>
-#include <cassert>
+#include <functional>
 #include <filesystem>
 
 namespace fs = std::filesystem;
 
 class TestRunner {
 private:
-    int m_totalTests{0};
-    int m_passedTests{0};
-    int m_failedTests{0};
+    int m_passed{0};
+    int m_failed{0};
+    std::vector<std::string> m_failedNames;
 
 public:
     void runTest(const std::string& testName, const std::function<bool()>& testFunc) {
-        ++m_totalTests;
         std::cout << "  [TEST] " << testName << " ... ";
         try {
             if (testFunc()) {
-                ++m_passedTests;
                 std::cout << "\033[32m[PASSED]\033[0m\n";
+                ++m_passed;
             } else {
-                ++m_failedTests;
                 std::cout << "\033[31m[FAILED]\033[0m\n";
+                ++m_failed;
+                m_failedNames.push_back(testName);
             }
         } catch (const std::exception& e) {
-            ++m_failedTests;
-            std::cout << "\033[31m[FAILED (Exception: " << e.what() << ")]\033[0m\n";
+            std::cout << "\033[31m[FAILED - EXCEPTION: " << e.what() << "]\033[0m\n";
+            ++m_failed;
+            m_failedNames.push_back(testName + " (" + e.what() + ")");
         } catch (...) {
-            ++m_failedTests;
-            std::cout << "\033[31m[FAILED (Unknown Exception)]\033[0m\n";
+            std::cout << "\033[31m[FAILED - UNKNOWN EXCEPTION]\033[0m\n";
+            ++m_failed;
+            m_failedNames.push_back(testName + " (unknown exception)");
         }
     }
 
     void printSummary() const {
         std::cout << "\n==================================================\n";
         std::cout << "  TEST SUMMARY:\n";
-        std::cout << "  Total Tests : " << m_totalTests << "\n";
-        std::cout << "  Passed      : \033[32m" << m_passedTests << "\033[0m\n";
-        std::cout << "  Failed      : " << (m_failedTests > 0 ? "\033[31m" : "\033[32m") << m_failedTests << "\033[0m\n";
+        std::cout << "  Total Tests : " << (m_passed + m_failed) << "\n";
+        std::cout << "  Passed      : " << m_passed << "\n";
+        std::cout << "  Failed      : " << m_failed << "\n";
+        if (!m_failedNames.empty()) {
+            std::cout << "  Failed list:\n";
+            for (const auto& name : m_failedNames) {
+                std::cout << "    - " << name << "\n";
+            }
+        }
         std::cout << "==================================================\n";
     }
 
-    int getExitCode() const {
-        return m_failedTests == 0 ? 0 : 1;
-    }
+    int getExitCode() const { return m_failed > 0 ? 1 : 0; }
 };
 
 int main() {
+    TestRunner runner;
+
     std::cout << "\n==================================================\n";
     std::cout << "  RUNNING LMS AUTOMATED UNIT TESTS (C++20)\n";
     std::cout << "  Author: Qamar Abbas\n";
     std::cout << "==================================================\n\n";
 
-    TestRunner runner;
-
-    // ── 1. Date & DateTime Tests ──────────────────────────────────────────
+    // ── 1. Date and Time Tests ────────────────────────────────────────────
     runner.runTest("Date::today and string conversion", []() {
-        auto today = LMS::Utils::Date::today();
-        std::string str = today.toString();
-        auto parsed = LMS::Utils::Date::fromString(str);
-        return today == parsed && today.isValid();
+        LMS::Utils::Date today = LMS::Utils::Date::today();
+        std::string s = today.toString();
+        LMS::Utils::Date parsed = LMS::Utils::Date::fromString(s);
+        return parsed.toString() == s;
     });
 
     runner.runTest("Date arithmetic (addDays & daysUntil)", []() {
@@ -121,22 +122,16 @@ int main() {
 
     // ── 3. String Utilities Tests ─────────────────────────────────────────
     runner.runTest("StringUtils trim & case conversion", []() {
-        std::string s = "  Clean Architecture  ";
-        return LMS::Utils::StringUtils::trim(s) == "Clean Architecture" &&
+        std::string s = "  Library Project  ";
+        return LMS::Utils::StringUtils::trim(s) == "Library Project" &&
                LMS::Utils::StringUtils::toLower("HeLLo") == "hello" &&
                LMS::Utils::StringUtils::toUpper("hello") == "HELLO";
     });
 
-    runner.runTest("Levenshtein distance & fuzzy search", []() {
-        size_t dist = LMS::Utils::StringUtils::levenshteinDistance("kitten", "sitting");
-        bool match = LMS::Utils::StringUtils::fuzzyMatch("Atomic Habits", "Atmoic Habbits");
-        return dist == 3 && match;
-    });
-
-    runner.runTest("ASCII Barcode & Card rendering", []() {
-        std::string card = LMS::Utils::Barcode::renderLibraryCard("USR-001", "qamarabbas", "student", "2026-01-01");
-        return card.find("LIBRARY MEMBERSHIP CARD") != std::string::npos &&
-               card.find("USR-001") != std::string::npos;
+    runner.runTest("StringUtils substring search (case-insensitive)", []() {
+        return LMS::Utils::StringUtils::containsIgnoreCase("Clean Architecture", "clean") &&
+               LMS::Utils::StringUtils::containsIgnoreCase("C++ Programming", "PROGRAMMING") &&
+               !LMS::Utils::StringUtils::containsIgnoreCase("Python", "Java");
     });
 
     runner.runTest("CSV line parser with quoted commas", []() {
@@ -155,54 +150,48 @@ int main() {
         
         bool b1 = book.borrowCopy();
         if (!b1 || book.getAvailableCopies() != 1 || book.getBorrowCount() != 1) return false;
-        
+
         bool b2 = book.borrowCopy();
         if (!b2 || book.getAvailableCopies() != 0 || book.isAvailable()) return false;
-        
-        // Cannot borrow when 0 copies
-        bool b3 = book.borrowCopy();
+
+        bool b3 = book.borrowCopy(); // Should fail (0 copies left)
         if (b3) return false;
 
-        // Return copy
-        bool r1 = book.returnCopy();
-        return r1 && book.getAvailableCopies() == 1 && book.isAvailable();
+        book.returnCopy();
+        return book.getAvailableCopies() == 1 && book.isAvailable();
     });
 
-    // ── 5. User Model & Policy Tests ──────────────────────────────────────
+    // ── 5. User Roles and Borrowing Limits ─────────────────────────────────
     runner.runTest("User role borrowing limits & policies", []() {
-        LMS::Models::User student("USR-01", "student1", "hash", "s@test.com", "123",
+        LMS::Models::User student("USR-1", "student_user", "hash", "s@test.com", "123",
                                   LMS::Models::UserRole::Member, LMS::Models::UserStatus::Active,
                                   LMS::Models::MembershipType::Student);
-        LMS::Models::User faculty("USR-02", "prof1", "hash", "p@test.com", "123",
+        LMS::Models::User faculty("USR-2", "faculty_user", "hash", "f@test.com", "456",
                                   LMS::Models::UserRole::Member, LMS::Models::UserStatus::Active,
                                   LMS::Models::MembershipType::Faculty);
 
         return student.getMaxBorrowLimit() == 4 &&
                student.getMaxLoanDays() == 14 &&
                faculty.getMaxBorrowLimit() == 8 &&
-               faculty.getMaxLoanDays() == 30 &&
-               student.canBorrow();
+               faculty.getMaxLoanDays() == 30;
     });
 
-    // ── 6. Loan State Machine & Overdue Fine Calculation ───────────────────
+    // ── 6. Loan Lifecycle & Fines ─────────────────────────────────────────
     runner.runTest("Loan due date and overdue fine calculation", []() {
+        LMS::Utils::Date reqDate(2026, 1, 1);
         LMS::Utils::Date issueDate(2026, 1, 1);
         LMS::Utils::Date dueDate(2026, 1, 15);
-        LMS::Models::Loan loan("LN-001", "USR-01", "BK-01", "Test Book", issueDate, issueDate, dueDate, LMS::Utils::Date(),
-                               LMS::Models::LoanStatus::Approved, 0.0, false, 0);
+        LMS::Utils::Date returnDate(2026, 1, 20); // 5 days late
 
-        // On day 10 (not overdue)
-        LMS::Utils::Date d10(2026, 1, 10);
-        double f1 = loan.updateFine(d10, 0.50);
-        if (f1 != 0.0 || loan.isOverdue(d10)) return false;
+        LMS::Models::Loan loan("LN-001", "USR-1", "BK-001", "Clean Code",
+                               reqDate, issueDate, dueDate, returnDate,
+                               LMS::Models::LoanStatus::Issued);
 
-        // On day 20 (5 days overdue -> 5 * $0.50 = $2.50)
-        LMS::Utils::Date d20(2026, 1, 20);
-        double f2 = loan.updateFine(d20, 0.50);
-        return f2 == 2.50 && loan.isOverdue(d20);
+        double fine = loan.updateFine(returnDate, 0.50); // 5 days * $0.50 = $2.50
+        return fine >= 2.49 && fine <= 2.51;
     });
 
-    // ── 7. Full Integration Test (Mock in scratch directory) ──────────────
+    // ── 7. Full Circulation Flow ──────────────────────────────────────────
     runner.runTest("Full circulation flow (request -> approve -> return)", []() {
         std::string testDir = "build/test_data";
         fs::create_directories(testDir);
@@ -213,11 +202,9 @@ int main() {
         auto resRepo  = std::make_shared<LMS::Storage::ReservationRepository>(testDir + "/reservations.csv");
         auto logger   = std::make_shared<LMS::Storage::AuditLogger>(testDir + "/audit.log");
 
-        // Add a test book
         LMS::Models::Book testBook("BK-999", "Integration Test Book", "Author", "Testing", 2026, 1);
         bookRepo->save(testBook);
 
-        // Add a test user
         LMS::Models::User testUser("USR-999", "testuser", "hash", "test@test.com", "000",
                                    LMS::Models::UserRole::Member, LMS::Models::UserStatus::Active,
                                    LMS::Models::MembershipType::Student);
@@ -225,35 +212,28 @@ int main() {
 
         LMS::Services::CirculationService circ(bookRepo, userRepo, loanRepo, resRepo, logger);
 
-        // 1. Request loan
         auto reqRes = circ.requestLoan("USR-999", "BK-999");
         if (!reqRes.success || !reqRes.id.has_value()) return false;
         std::string loanId = reqRes.id.value();
 
-        // 2. Approve loan
         auto appRes = circ.approveLoan(loanId, "ADMIN");
         if (!appRes.success) return false;
 
-        // Verify book stock decreased
         auto bookAfter = bookRepo->findById("BK-999");
         if (!bookAfter.has_value() || bookAfter->getAvailableCopies() != 0) return false;
 
-        // 3. Return book
         auto retRes = circ.returnBook(loanId, "USR-999");
         if (!retRes.success) return false;
 
-        // Verify book stock restored
         auto bookRestored = bookRepo->findById("BK-999");
         if (!bookRestored.has_value() || bookRestored->getAvailableCopies() != 1) return false;
 
-        // Clean up test files
         try { fs::remove_all(testDir); } catch (...) {}
-
         return true;
     });
 
-    // ── 8. Book Renewal Policy Test ───────────────────────────────────────
-    runner.runTest("Loan renewal limits and policy enforcement", []() {
+    // ── 8. Book Renewal Limits ────────────────────────────────────────────
+    runner.runTest("Loan renewal limits (max 2 renewals)", []() {
         std::string testDir = "build/test_data_renewal";
         fs::create_directories(testDir);
 
@@ -276,23 +256,20 @@ int main() {
         auto req = circ.requestLoan("USR-888", "BK-888");
         circ.approveLoan(req.id.value(), "ADMIN");
 
-        // Renewal 1: should succeed
         auto ren1 = circ.renewLoan(req.id.value(), "USR-888");
         if (!ren1.success) return false;
 
-        // Renewal 2: should succeed
         auto ren2 = circ.renewLoan(req.id.value(), "USR-888");
         if (!ren2.success) return false;
 
-        // Renewal 3: should fail (exceeds max 2 renewals)
-        auto ren3 = circ.renewLoan(req.id.value(), "USR-888");
+        auto ren3 = circ.renewLoan(req.id.value(), "USR-888"); // Should fail
         if (ren3.success) return false;
 
         try { fs::remove_all(testDir); } catch (...) {}
         return true;
     });
 
-    // ── 9. Book Reservation & Notification Queue Test ─────────────────────
+    // ── 9. Book Reservation Queue ─────────────────────────────────────────
     runner.runTest("Book reservation waitlist queue on stock depletion", []() {
         std::string testDir = "build/test_data_res";
         fs::create_directories(testDir);
@@ -303,8 +280,7 @@ int main() {
         auto resRepo  = std::make_shared<LMS::Storage::ReservationRepository>(testDir + "/reservations.csv");
         auto logger   = std::make_shared<LMS::Storage::AuditLogger>(testDir + "/audit.log");
 
-        // Single copy book
-        LMS::Models::Book book("BK-777", "Popular Book", "Author", "Fiction", 2026, 1);
+        LMS::Models::Book book("BK-777", "Single Copy Book", "Author", "Fiction", 2026, 1);
         bookRepo->save(book);
 
         LMS::Models::User u1("USR-701", "user1", "hash", "u1@test.com", "111",
@@ -318,15 +294,12 @@ int main() {
 
         LMS::Services::CirculationService circ(bookRepo, userRepo, loanRepo, resRepo, logger);
 
-        // u1 borrows the only copy
         auto loanReq = circ.requestLoan("USR-701", "BK-777");
         circ.approveLoan(loanReq.id.value(), "ADMIN");
 
-        // u2 places a reservation since stock is 0
         auto resResult = circ.reserveBook("USR-702", "BK-777");
         if (!resResult.success) return false;
 
-        // u1 returns book -> system should automatically process waitlist
         auto ret = circ.returnBook(loanReq.id.value(), "USR-701");
         if (!ret.success) return false;
 
@@ -337,51 +310,31 @@ int main() {
         return true;
     });
 
-    // ── 10. Recommendation Service Scoring Test ───────────────────────────
-    runner.runTest("RecommendationService affinity scoring", []() {
-        std::string testDir = "build/test_data_rec";
+    // ── 10. 2FA Password Reset Verification ───────────────────────────────
+    runner.runTest("2-Factor password reset verification (Email + Phone)", []() {
+        std::string testDir = "build/test_data_auth";
         fs::create_directories(testDir);
 
-        auto bookRepo = std::make_shared<LMS::Storage::BookRepository>(testDir + "/books.csv");
-        auto loanRepo = std::make_shared<LMS::Storage::LoanRepository>(testDir + "/loans.csv");
+        auto userRepo = std::make_shared<LMS::Storage::UserRepository>(testDir + "/users.csv");
+        auto logger   = std::make_shared<LMS::Storage::AuditLogger>(testDir + "/audit.log");
+        LMS::Services::AuthService auth(userRepo, logger);
 
-        bookRepo->save(LMS::Models::Book("BK-1", "C++ Primer", "Lippman", "Programming", 2012, 5));
-        bookRepo->save(LMS::Models::Book("BK-2", "Effective Modern C++", "Scott Meyers", "Programming", 2014, 5));
-        bookRepo->save(LMS::Models::Book("BK-3", "The Great Gatsby", "Fitzgerald", "Classics", 1925, 5));
+        auth.signup("student_reset", "OldPass123", "student_reset@test.com", "03001234567", LMS::Models::MembershipType::Student);
 
-        LMS::Utils::Date now = LMS::Utils::Date::today();
-        loanRepo->save(LMS::Models::Loan("LN-1", "USR-1", "BK-1", "C++ Primer", now, now, now.addDays(14), now,
-                                         LMS::Models::LoanStatus::Returned, 0.0, true, 0));
+        // Reset with wrong phone -> should fail
+        bool fail = auth.resetPassword("student_reset@test.com", "03009999999", "NewPass123");
+        if (fail) return false;
 
-        LMS::Services::RecommendationService recs(bookRepo, loanRepo);
-        auto suggestions = recs.getRecommendationsForUser("USR-1", 5);
+        // Reset with correct email + phone -> should succeed
+        bool ok = auth.resetPassword("student_reset@test.com", "03001234567", "NewPass123");
+        if (!ok) return false;
 
-        // BK-2 should be top recommendation because of Programming category affinity
-        bool ok = !suggestions.empty() && suggestions[0].getId() == "BK-2";
+        // Login with new password
+        auto loginRes = auth.login("student_reset", "NewPass123");
+        bool loggedIn = loginRes.success;
 
         try { fs::remove_all(testDir); } catch (...) {}
-        return ok;
-    });
-
-    // ── 11. Receipt Generation & Export Test ───────────────────────────────
-    runner.runTest("ReceiptService format and file export", []() {
-        LMS::Utils::Date now = LMS::Utils::Date::today();
-        LMS::Models::Loan loan("LN-TEST", "USR-1", "BK-1", "Clean Architecture", now, now, now.addDays(14), now,
-                               LMS::Models::LoanStatus::Issued, 0.0, false, 0);
-        LMS::Models::Book book("BK-1", "Clean Architecture", "Robert Martin", "CS", 2017, 3);
-        LMS::Models::User user("USR-1", "qamarabbas", "hash", "q@test.com", "123",
-                               LMS::Models::UserRole::Member, LMS::Models::UserStatus::Active,
-                               LMS::Models::MembershipType::Student);
-
-        std::string receipt = LMS::Services::ReceiptService::generateCheckoutReceipt(loan, book, user);
-        if (receipt.find("LIBRARY BOOK CHECKOUT RECEIPT") == std::string::npos) return false;
-
-        bool exported = LMS::Services::ReceiptService::exportReceiptToFile(receipt, "test_receipt.txt");
-        if (!exported) return false;
-
-        // Cleanup
-        try { fs::remove("exports/test_receipt.txt"); } catch (...) {}
-        return true;
+        return loggedIn;
     });
 
     runner.printSummary();

@@ -51,7 +51,6 @@ jobs:
             src\utils\StringUtils.cpp ^
             src\utils\Terminal.cpp ^
             src\utils\TableFormatter.cpp ^
-            src\utils\Barcode.cpp ^
             src\models\Book.cpp ^
             src\models\User.cpp ^
             src\models\Loan.cpp ^
@@ -67,7 +66,5 @@ jobs:
             src\services\MemberService.cpp ^
             src\services\CirculationService.cpp ^
             src\services\ReportService.cpp ^
-            src\services\ReceiptService.cpp ^
-            src\services\RecommendationService.cpp ^
             tests\test_runner.cpp -o build\test_runner.exe
           build\test_runner.exe

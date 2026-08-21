@@ -5,19 +5,17 @@
 #include "services/MemberService.h"
 #include "services/CirculationService.h"
 #include "services/ReportService.h"
-#include "services/RecommendationService.h"
 #include <memory>
 
 namespace LMS::UI {
 
 class LibraryApp {
 private:
-    std::shared_ptr<Services::AuthService>           m_auth;
-    std::shared_ptr<Services::BookService>           m_books;
-    std::shared_ptr<Services::MemberService>         m_members;
-    std::shared_ptr<Services::CirculationService>    m_circ;
-    std::shared_ptr<Services::ReportService>         m_reports;
-    std::shared_ptr<Services::RecommendationService> m_recs;
+    std::shared_ptr<Services::AuthService>        m_auth;
+    std::shared_ptr<Services::BookService>        m_books;
+    std::shared_ptr<Services::MemberService>      m_members;
+    std::shared_ptr<Services::CirculationService> m_circ;
+    std::shared_ptr<Services::ReportService>      m_reports;
 
     // ── Main menu screens ─────────────────────────────────────────────────
     void showWelcomeScreen();
@@ -56,8 +54,6 @@ private:
     // ── Member flows ──────────────────────────────────────────────────────
     void runMemberDashboard();
     void memberSearchBooks();
-    void memberRecommendedBooks();
-    void memberViewCard();
     void memberRequestLoan();
     void memberMyLoans();
     void memberReturnBook();
@@ -77,8 +73,7 @@ public:
                std::shared_ptr<Services::BookService> books,
                std::shared_ptr<Services::MemberService> members,
                std::shared_ptr<Services::CirculationService> circ,
-               std::shared_ptr<Services::ReportService> reports,
-               std::shared_ptr<Services::RecommendationService> recs);
+               std::shared_ptr<Services::ReportService> reports);
 
     void run();
 };

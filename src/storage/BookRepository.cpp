@@ -91,9 +91,9 @@ std::vector<Models::Book> BookRepository::search(const std::string& query) const
     if (query.empty()) return m_books;
     std::vector<Models::Book> results;
     for (const auto& b : m_books) {
-        if (Utils::StringUtils::fuzzyMatch(b.getTitle(), query) ||
-            Utils::StringUtils::fuzzyMatch(b.getAuthor(), query) ||
-            Utils::StringUtils::fuzzyMatch(b.getCategory(), query) ||
+        if (Utils::StringUtils::containsIgnoreCase(b.getTitle(), query) ||
+            Utils::StringUtils::containsIgnoreCase(b.getAuthor(), query) ||
+            Utils::StringUtils::containsIgnoreCase(b.getCategory(), query) ||
             Utils::StringUtils::containsIgnoreCase(b.getId(), query) ||
             Utils::StringUtils::containsIgnoreCase(b.getIsbn(), query)) {
             results.push_back(b);

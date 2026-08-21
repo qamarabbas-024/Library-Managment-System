@@ -2,8 +2,9 @@
  * ============================================================
  *  Library Management System  v2.0
  *  Author  : Qamar Abbas
+ *  Course  : Object-Oriented Programming (OOP)
  *  Language: C++20
- *  Storage : Flat-file CSV (no external database required)
+ *  Storage : Flat-file CSV (zero external database)
  * ============================================================
  */
 
@@ -30,15 +31,14 @@ int main() {
     auto auditLogger = std::make_shared<LMS::Storage::AuditLogger>          ("logs/audit.log");
 
     // ── Service layer (business logic) ────────────────────────────────────
-    auto authService = std::make_shared<LMS::Services::AuthService>          (userRepo, auditLogger);
-    auto bookService = std::make_shared<LMS::Services::BookService>          (bookRepo, auditLogger);
-    auto memService  = std::make_shared<LMS::Services::MemberService>        (userRepo, loanRepo, auditLogger);
-    auto circService = std::make_shared<LMS::Services::CirculationService>   (bookRepo, userRepo, loanRepo, resRepo, auditLogger);
-    auto repService  = std::make_shared<LMS::Services::ReportService>        (bookRepo, userRepo, loanRepo, auditLogger);
-    auto recService  = std::make_shared<LMS::Services::RecommendationService>(bookRepo, loanRepo);
+    auto authService = std::make_shared<LMS::Services::AuthService>       (userRepo, auditLogger);
+    auto bookService = std::make_shared<LMS::Services::BookService>       (bookRepo, auditLogger);
+    auto memService  = std::make_shared<LMS::Services::MemberService>     (userRepo, loanRepo, auditLogger);
+    auto circService = std::make_shared<LMS::Services::CirculationService>(bookRepo, userRepo, loanRepo, resRepo, auditLogger);
+    auto repService  = std::make_shared<LMS::Services::ReportService>     (bookRepo, userRepo, loanRepo, auditLogger);
 
     // ── UI layer ──────────────────────────────────────────────────────────
-    LMS::UI::LibraryApp app(authService, bookService, memService, circService, repService, recService);
+    LMS::UI::LibraryApp app(authService, bookService, memService, circService, repService);
     app.run();
 
     return 0;

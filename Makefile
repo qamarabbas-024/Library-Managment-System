@@ -22,7 +22,6 @@ SOURCES  := \
     src/utils/StringUtils.cpp \
     src/utils/Terminal.cpp \
     src/utils/TableFormatter.cpp \
-    src/utils/Barcode.cpp \
     src/models/Book.cpp \
     src/models/User.cpp \
     src/models/Loan.cpp \
@@ -38,8 +37,6 @@ SOURCES  := \
     src/services/MemberService.cpp \
     src/services/CirculationService.cpp \
     src/services/ReportService.cpp \
-    src/services/RecommendationService.cpp \
-    src/services/ReceiptService.cpp \
     src/ui/LibraryApp.cpp \
     main.cpp
 
@@ -49,7 +46,6 @@ TEST_SOURCES := \
     src/utils/StringUtils.cpp \
     src/utils/Terminal.cpp \
     src/utils/TableFormatter.cpp \
-    src/utils/Barcode.cpp \
     src/models/Book.cpp \
     src/models/User.cpp \
     src/models/Loan.cpp \
@@ -65,8 +61,6 @@ TEST_SOURCES := \
     src/services/MemberService.cpp \
     src/services/CirculationService.cpp \
     src/services/ReportService.cpp \
-    src/services/RecommendationService.cpp \
-    src/services/ReceiptService.cpp \
     tests/test_runner.cpp
 
 .PHONY: all clean run test
