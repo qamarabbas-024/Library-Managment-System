@@ -1,0 +1,73 @@
+name: C++20 CI Build & Test
+
+on:
+  push:
+    branches: [ main, master, feature/**, fix/** ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-test:
+    name: Build & Test (Ubuntu & Windows)
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up GCC (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y g++-12 make
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 100
+
+      - name: Build Application (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          make all
+
+      - name: Build and Run Unit Tests (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          g++ -std=c++20 -Wall -Wextra -O2 -Iinclude \
+            src/utils/*.cpp src/models/*.cpp src/storage/*.cpp src/services/*.cpp \
+            tests/test_runner.cpp -o build/test_runner
+          ./build/test_runner
+
+      - name: Build Application (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          call build.bat
+
+      - name: Build and Run Unit Tests (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          g++ -std=c++20 -Wall -Wextra -O2 -Iinclude ^
+            src\utils\DateTime.cpp ^
+            src\utils\Crypto.cpp ^
+            src\utils\StringUtils.cpp ^
+            src\utils\Terminal.cpp ^
+            src\utils\TableFormatter.cpp ^
+            src\models\Book.cpp ^
+            src\models\User.cpp ^
+            src\models\Loan.cpp ^
+            src\models\Reservation.cpp ^
+            src\storage\CsvEngine.cpp ^
+            src\storage\BookRepository.cpp ^
+            src\storage\UserRepository.cpp ^
+            src\storage\LoanRepository.cpp ^
+            src\storage\ReservationRepository.cpp ^
+            src\storage\AuditLogger.cpp ^
+            src\services\BookService.cpp ^
+            src\services\AuthService.cpp ^
+            src\services\MemberService.cpp ^
+            src\services\CirculationService.cpp ^
+            src\services\ReportService.cpp ^
+            tests\test_runner.cpp -o build\test_runner.exe
+          build\test_runner.exe
