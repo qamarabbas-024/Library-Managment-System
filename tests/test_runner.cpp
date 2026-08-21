@@ -25,6 +25,8 @@
 #include "services/MemberService.h"
 #include "services/CirculationService.h"
 #include "services/ReportService.h"
+#include "services/RecommendationService.h"
+#include "services/ReceiptService.h"
 
 #include <iostream>
 #include <vector>
@@ -247,6 +249,138 @@ int main() {
         // Clean up test files
         try { fs::remove_all(testDir); } catch (...) {}
 
+        return true;
+    });
+
+    // ── 8. Book Renewal Policy Test ───────────────────────────────────────
+    runner.runTest("Loan renewal limits and policy enforcement", []() {
+        std::string testDir = "build/test_data_renewal";
+        fs::create_directories(testDir);
+
+        auto bookRepo = std::make_shared<LMS::Storage::BookRepository>(testDir + "/books.csv");
+        auto userRepo = std::make_shared<LMS::Storage::UserRepository>(testDir + "/users.csv");
+        auto loanRepo = std::make_shared<LMS::Storage::LoanRepository>(testDir + "/loans.csv");
+        auto resRepo  = std::make_shared<LMS::Storage::ReservationRepository>(testDir + "/reservations.csv");
+        auto logger   = std::make_shared<LMS::Storage::AuditLogger>(testDir + "/audit.log");
+
+        LMS::Models::Book book("BK-888", "Renewal Book", "Author", "CS", 2026, 2);
+        bookRepo->save(book);
+
+        LMS::Models::User user("USR-888", "renewer", "hash", "r@test.com", "111",
+                               LMS::Models::UserRole::Member, LMS::Models::UserStatus::Active,
+                               LMS::Models::MembershipType::Student);
+        userRepo->save(user);
+
+        LMS::Services::CirculationService circ(bookRepo, userRepo, loanRepo, resRepo, logger);
+
+        auto req = circ.requestLoan("USR-888", "BK-888");
+        circ.approveLoan(req.id.value(), "ADMIN");
+
+        // Renewal 1: should succeed
+        auto ren1 = circ.renewLoan(req.id.value(), "USR-888");
+        if (!ren1.success) return false;
+
+        // Renewal 2: should succeed
+        auto ren2 = circ.renewLoan(req.id.value(), "USR-888");
+        if (!ren2.success) return false;
+
+        // Renewal 3: should fail (exceeds max 2 renewals)
+        auto ren3 = circ.renewLoan(req.id.value(), "USR-888");
+        if (ren3.success) return false;
+
+        try { fs::remove_all(testDir); } catch (...) {}
+        return true;
+    });
+
+    // ── 9. Book Reservation & Notification Queue Test ─────────────────────
+    runner.runTest("Book reservation waitlist queue on stock depletion", []() {
+        std::string testDir = "build/test_data_res";
+        fs::create_directories(testDir);
+
+        auto bookRepo = std::make_shared<LMS::Storage::BookRepository>(testDir + "/books.csv");
+        auto userRepo = std::make_shared<LMS::Storage::UserRepository>(testDir + "/users.csv");
+        auto loanRepo = std::make_shared<LMS::Storage::LoanRepository>(testDir + "/loans.csv");
+        auto resRepo  = std::make_shared<LMS::Storage::ReservationRepository>(testDir + "/reservations.csv");
+        auto logger   = std::make_shared<LMS::Storage::AuditLogger>(testDir + "/audit.log");
+
+        // Single copy book
+        LMS::Models::Book book("BK-777", "Popular Book", "Author", "Fiction", 2026, 1);
+        bookRepo->save(book);
+
+        LMS::Models::User u1("USR-701", "user1", "hash", "u1@test.com", "111",
+                             LMS::Models::UserRole::Member, LMS::Models::UserStatus::Active,
+                             LMS::Models::MembershipType::Student);
+        LMS::Models::User u2("USR-702", "user2", "hash", "u2@test.com", "222",
+                             LMS::Models::UserRole::Member, LMS::Models::UserStatus::Active,
+                             LMS::Models::MembershipType::Student);
+        userRepo->save(u1);
+        userRepo->save(u2);
+
+        LMS::Services::CirculationService circ(bookRepo, userRepo, loanRepo, resRepo, logger);
+
+        // u1 borrows the only copy
+        auto loanReq = circ.requestLoan("USR-701", "BK-777");
+        circ.approveLoan(loanReq.id.value(), "ADMIN");
+
+        // u2 places a reservation since stock is 0
+        auto resResult = circ.reserveBook("USR-702", "BK-777");
+        if (!resResult.success) return false;
+
+        // u1 returns book -> system should automatically process waitlist
+        auto ret = circ.returnBook(loanReq.id.value(), "USR-701");
+        if (!ret.success) return false;
+
+        auto userResList = circ.getUserReservations("USR-702");
+        if (userResList.empty()) return false;
+
+        try { fs::remove_all(testDir); } catch (...) {}
+        return true;
+    });
+
+    // ── 10. Recommendation Service Scoring Test ───────────────────────────
+    runner.runTest("RecommendationService affinity scoring", []() {
+        std::string testDir = "build/test_data_rec";
+        fs::create_directories(testDir);
+
+        auto bookRepo = std::make_shared<LMS::Storage::BookRepository>(testDir + "/books.csv");
+        auto loanRepo = std::make_shared<LMS::Storage::LoanRepository>(testDir + "/loans.csv");
+
+        bookRepo->save(LMS::Models::Book("BK-1", "C++ Primer", "Lippman", "Programming", 2012, 5));
+        bookRepo->save(LMS::Models::Book("BK-2", "Effective Modern C++", "Scott Meyers", "Programming", 2014, 5));
+        bookRepo->save(LMS::Models::Book("BK-3", "The Great Gatsby", "Fitzgerald", "Classics", 1925, 5));
+
+        LMS::Utils::Date now = LMS::Utils::Date::today();
+        loanRepo->save(LMS::Models::Loan("LN-1", "USR-1", "BK-1", "C++ Primer", now, now, now.addDays(14), now,
+                                         LMS::Models::LoanStatus::Returned, 0.0, true, 0));
+
+        LMS::Services::RecommendationService recs(bookRepo, loanRepo);
+        auto suggestions = recs.getRecommendationsForUser("USR-1", 5);
+
+        // BK-2 should be top recommendation because of Programming category affinity
+        bool ok = !suggestions.empty() && suggestions[0].getId() == "BK-2";
+
+        try { fs::remove_all(testDir); } catch (...) {}
+        return ok;
+    });
+
+    // ── 11. Receipt Generation & Export Test ───────────────────────────────
+    runner.runTest("ReceiptService format and file export", []() {
+        LMS::Utils::Date now = LMS::Utils::Date::today();
+        LMS::Models::Loan loan("LN-TEST", "USR-1", "BK-1", "Clean Architecture", now, now, now.addDays(14), now,
+                               LMS::Models::LoanStatus::Issued, 0.0, false, 0);
+        LMS::Models::Book book("BK-1", "Clean Architecture", "Robert Martin", "CS", 2017, 3);
+        LMS::Models::User user("USR-1", "qamarabbas", "hash", "q@test.com", "123",
+                               LMS::Models::UserRole::Member, LMS::Models::UserStatus::Active,
+                               LMS::Models::MembershipType::Student);
+
+        std::string receipt = LMS::Services::ReceiptService::generateCheckoutReceipt(loan, book, user);
+        if (receipt.find("LIBRARY BOOK CHECKOUT RECEIPT") == std::string::npos) return false;
+
+        bool exported = LMS::Services::ReceiptService::exportReceiptToFile(receipt, "test_receipt.txt");
+        if (!exported) return false;
+
+        // Cleanup
+        try { fs::remove("exports/test_receipt.txt"); } catch (...) {}
         return true;
     });
 
