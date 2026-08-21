@@ -99,4 +99,51 @@ std::string StringUtils::truncate(const std::string& str, size_t maxLen, const s
     return str.substr(0, maxLen - suffix.length()) + suffix;
 }
 
+size_t StringUtils::levenshteinDistance(const std::string& s1, const std::string& s2) {
+    std::string str1 = toLower(s1);
+    std::string str2 = toLower(s2);
+    const size_t m = str1.size();
+    const size_t n = str2.size();
+
+    if (m == 0) return n;
+    if (n == 0) return m;
+
+    std::vector<size_t> prev(n + 1);
+    std::vector<size_t> curr(n + 1);
+
+    for (size_t j = 0; j <= n; ++j) prev[j] = j;
+
+    for (size_t i = 1; i <= m; ++i) {
+        curr[0] = i;
+        for (size_t j = 1; j <= n; ++j) {
+            size_t cost = (str1[i - 1] == str2[j - 1]) ? 0 : 1;
+            curr[j] = std::min({prev[j] + 1, curr[j - 1] + 1, prev[j - 1] + cost});
+        }
+        prev = curr;
+    }
+    return prev[n];
+}
+
+double StringUtils::similarity(const std::string& s1, const std::string& s2) {
+    size_t maxLen = std::max(s1.length(), s2.length());
+    if (maxLen == 0) return 1.0;
+    size_t dist = levenshteinDistance(s1, s2);
+    return 1.0 - (static_cast<double>(dist) / static_cast<double>(maxLen));
+}
+
+bool StringUtils::fuzzyMatch(const std::string& text, const std::string& pattern, double threshold) {
+    if (pattern.empty()) return true;
+    if (containsIgnoreCase(text, pattern)) return true;
+
+    // Check whole string similarity
+    if (similarity(text, pattern) >= threshold) return true;
+
+    // Check individual word similarities
+    auto words = split(text, ' ');
+    for (const auto& w : words) {
+        if (similarity(w, pattern) >= threshold) return true;
+    }
+    return false;
+}
+
 } // namespace LMS::Utils

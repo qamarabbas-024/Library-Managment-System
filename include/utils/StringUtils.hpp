@@ -19,6 +19,11 @@ public:
     static std::string padRight(const std::string& str, size_t width, char padChar = ' ');
     static std::string padLeft(const std::string& str, size_t width, char padChar = ' ');
     static std::string truncate(const std::string& str, size_t maxLen, const std::string& suffix = "...");
+    
+    // Fuzzy matching algorithms
+    static size_t levenshteinDistance(const std::string& s1, const std::string& s2);
+    static double similarity(const std::string& s1, const std::string& s2);
+    static bool fuzzyMatch(const std::string& text, const std::string& pattern, double threshold = 0.60);
 };
 
 } // namespace LMS::Utils

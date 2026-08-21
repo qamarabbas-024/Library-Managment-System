@@ -2,6 +2,8 @@
 #include "utils/Terminal.hpp"
 #include "utils/TableFormatter.hpp"
 #include "utils/StringUtils.hpp"
+#include "utils/Barcode.hpp"
+#include "services/ReceiptService.hpp"
 #include <iostream>
 #include <iomanip>
 #include <sstream>
@@ -14,12 +16,14 @@ LibraryApp::LibraryApp(std::shared_ptr<Services::AuthService> auth,
                        std::shared_ptr<Services::BookService> books,
                        std::shared_ptr<Services::MemberService> members,
                        std::shared_ptr<Services::CirculationService> circ,
-                       std::shared_ptr<Services::ReportService> reports)
+                       std::shared_ptr<Services::ReportService> reports,
+                       std::shared_ptr<Services::RecommendationService> recs)
     : m_auth(std::move(auth)),
       m_books(std::move(books)),
       m_members(std::move(members)),
       m_circ(std::move(circ)),
-      m_reports(std::move(reports)) {}
+      m_reports(std::move(reports)),
+      m_recs(std::move(recs)) {}
 
 // ═══════════════════════════════════════════════════════════════════════════
 //  APPLICATION ENTRY POINT
@@ -699,30 +703,56 @@ void LibraryApp::runMemberDashboard() {
 
         std::cout << "\n";
         std::cout << "  " << Color::Bold << "[1]" << Color::Reset << "  Browse & Search Books\n";
-        std::cout << "  " << Color::Bold << "[2]" << Color::Reset << "  Request a Book Loan\n";
-        std::cout << "  " << Color::Bold << "[3]" << Color::Reset << "  My Active Loans\n";
-        std::cout << "  " << Color::Bold << "[4]" << Color::Reset << "  Return a Book\n";
-        std::cout << "  " << Color::Bold << "[5]" << Color::Reset << "  Renew a Loan\n";
-        std::cout << "  " << Color::Bold << "[6]" << Color::Reset << "  Reserve a Book\n";
-        std::cout << "  " << Color::Bold << "[7]" << Color::Reset << "  My Reservations\n";
-        std::cout << "  " << Color::Bold << "[8]" << Color::Reset << "  Update Profile\n";
-        std::cout << "  " << Color::Bold << "[9]" << Color::Reset << "  Change Password\n";
+        std::cout << "  " << Color::Bold << "[2]" << Color::Reset << "  " << Color::Cyan << "Recommended For You (AI Suggestions)" << Color::Reset << "\n";
+        std::cout << "  " << Color::Bold << "[3]" << Color::Reset << "  View My Digital Library Card\n";
+        std::cout << "  " << Color::Bold << "[4]" << Color::Reset << "  Request a Book Loan\n";
+        std::cout << "  " << Color::Bold << "[5]" << Color::Reset << "  My Active Loans\n";
+        std::cout << "  " << Color::Bold << "[6]" << Color::Reset << "  Return a Book\n";
+        std::cout << "  " << Color::Bold << "[7]" << Color::Reset << "  Renew a Loan\n";
+        std::cout << "  " << Color::Bold << "[8]" << Color::Reset << "  Reserve a Book\n";
+        std::cout << "  " << Color::Bold << "[9]" << Color::Reset << "  My Reservations\n";
+        std::cout << "  " << Color::Bold << "[10]" << Color::Reset << " Update Profile\n";
+        std::cout << "  " << Color::Bold << "[11]" << Color::Reset << " Change Password\n";
         std::cout << "  " << Color::Bold << "[0]" << Color::Reset << "  Logout\n";
 
-        int ch = Terminal::readInt("\n  Choice: ", 0, 9);
+        int ch = Terminal::readInt("\n  Choice: ", 0, 11);
         switch (ch) {
-            case 1: memberSearchBooks();       break;
-            case 2: memberRequestLoan();       break;
-            case 3: memberMyLoans();           break;
-            case 4: memberReturnBook();        break;
-            case 5: memberRenewLoan();         break;
-            case 6: memberReserveBook();       break;
-            case 7: memberMyReservations();    break;
-            case 8: memberUpdateProfile();     break;
-            case 9: memberChangePassword();    break;
+            case 1:  memberSearchBooks();       break;
+            case 2:  memberRecommendedBooks();  break;
+            case 3:  memberViewCard();          break;
+            case 4:  memberRequestLoan();       break;
+            case 5:  memberMyLoans();           break;
+            case 6:  memberReturnBook();        break;
+            case 7:  memberRenewLoan();         break;
+            case 8:  memberReserveBook();       break;
+            case 9:  memberMyReservations();    break;
+            case 10: memberUpdateProfile();     break;
+            case 11: memberChangePassword();    break;
             case 0: return;
         }
     }
+}
+
+void LibraryApp::memberRecommendedBooks() {
+    Terminal::clear();
+    Terminal::printHeader("RECOMMENDED FOR YOU", "Smart suggestions based on your reading history");
+    const auto& user = m_auth->getCurrentUser();
+    if (user.has_value() && m_recs) {
+        auto recs = m_recs->getRecommendationsForUser(user->getId(), 6);
+        printBookTable(recs);
+    }
+    Terminal::pause();
+}
+
+void LibraryApp::memberViewCard() {
+    Terminal::clear();
+    Terminal::printHeader("DIGITAL MEMBERSHIP CARD", "Official University Library Identification");
+    const auto& user = m_auth->getCurrentUser();
+    if (user.has_value()) {
+        std::cout << "\n";
+        std::cout << Color::Cyan << Barcode::renderLibraryCard(user->getId(), user->getUsername(), user->getMembershipTypeString(), user->getCreatedAt()) << Color::Reset << "\n";
+    }
+    Terminal::pause();
 }
 
 void LibraryApp::memberSearchBooks() {

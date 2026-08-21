@@ -9,6 +9,7 @@
 #include "utils/DateTime.hpp"
 #include "utils/Crypto.hpp"
 #include "utils/StringUtils.hpp"
+#include "utils/Barcode.hpp"
 #include "models/Book.hpp"
 #include "models/User.hpp"
 #include "models/Loan.hpp"
@@ -122,6 +123,18 @@ int main() {
         return LMS::Utils::StringUtils::trim(s) == "Clean Architecture" &&
                LMS::Utils::StringUtils::toLower("HeLLo") == "hello" &&
                LMS::Utils::StringUtils::toUpper("hello") == "HELLO";
+    });
+
+    runner.runTest("Levenshtein distance & fuzzy search", []() {
+        size_t dist = LMS::Utils::StringUtils::levenshteinDistance("kitten", "sitting");
+        bool match = LMS::Utils::StringUtils::fuzzyMatch("Atomic Habits", "Atmoic Habbits");
+        return dist == 3 && match;
+    });
+
+    runner.runTest("ASCII Barcode & Card rendering", []() {
+        std::string card = LMS::Utils::Barcode::renderLibraryCard("USR-001", "qamarabbas", "student", "2026-01-01");
+        return card.find("LIBRARY MEMBERSHIP CARD") != std::string::npos &&
+               card.find("USR-001") != std::string::npos;
     });
 
     runner.runTest("CSV line parser with quoted commas", []() {

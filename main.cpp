@@ -30,14 +30,15 @@ int main() {
     auto auditLogger = std::make_shared<LMS::Storage::AuditLogger>          ("logs/audit.log");
 
     // ── Service layer (business logic) ────────────────────────────────────
-    auto authService = std::make_shared<LMS::Services::AuthService>       (userRepo, auditLogger);
-    auto bookService = std::make_shared<LMS::Services::BookService>       (bookRepo, auditLogger);
-    auto memService  = std::make_shared<LMS::Services::MemberService>     (userRepo, loanRepo, auditLogger);
-    auto circService = std::make_shared<LMS::Services::CirculationService>(bookRepo, userRepo, loanRepo, resRepo, auditLogger);
-    auto repService  = std::make_shared<LMS::Services::ReportService>     (bookRepo, userRepo, loanRepo, auditLogger);
+    auto authService = std::make_shared<LMS::Services::AuthService>          (userRepo, auditLogger);
+    auto bookService = std::make_shared<LMS::Services::BookService>          (bookRepo, auditLogger);
+    auto memService  = std::make_shared<LMS::Services::MemberService>        (userRepo, loanRepo, auditLogger);
+    auto circService = std::make_shared<LMS::Services::CirculationService>   (bookRepo, userRepo, loanRepo, resRepo, auditLogger);
+    auto repService  = std::make_shared<LMS::Services::ReportService>        (bookRepo, userRepo, loanRepo, auditLogger);
+    auto recService  = std::make_shared<LMS::Services::RecommendationService>(bookRepo, loanRepo);
 
     // ── UI layer ──────────────────────────────────────────────────────────
-    LMS::UI::LibraryApp app(authService, bookService, memService, circService, repService);
+    LMS::UI::LibraryApp app(authService, bookService, memService, circService, repService, recService);
     app.run();
 
     return 0;

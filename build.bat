@@ -28,6 +28,7 @@ echo [CC] Compiling source files...
     src\utils\StringUtils.cpp ^
     src\utils\Terminal.cpp ^
     src\utils\TableFormatter.cpp ^
+    src\utils\Barcode.cpp ^
     src\models\Book.cpp ^
     src\models\User.cpp ^
     src\models\Loan.cpp ^
@@ -43,6 +44,8 @@ echo [CC] Compiling source files...
     src\services\MemberService.cpp ^
     src\services\CirculationService.cpp ^
     src\services\ReportService.cpp ^
+    src\services\RecommendationService.cpp ^
+    src\services\ReceiptService.cpp ^
     src\ui\LibraryApp.cpp ^
     main.cpp ^
     -o %OUT%
