@@ -5,15 +5,15 @@ OUTDIR   := build
 
 # OS detection for cross-platform compatibility
 ifeq ($(OS),Windows_NT)
-    TARGET  := $(OUTDIR)/LibrarySystem.exe
+    TARGET   := $(OUTDIR)/LibrarySystem.exe
     TEST_BIN := $(OUTDIR)/test_runner.exe
-    MKDIR   := if not exist $(OUTDIR) mkdir $(OUTDIR)
-    RM      := if exist $(OUTDIR) rmdir /s /q $(OUTDIR)
+    MKDIR    := if not exist $(OUTDIR) mkdir $(OUTDIR)
+    RM       := if exist $(OUTDIR) rmdir /s /q $(OUTDIR)
 else
-    TARGET  := $(OUTDIR)/LibrarySystem
+    TARGET   := $(OUTDIR)/LibrarySystem
     TEST_BIN := $(OUTDIR)/test_runner
-    MKDIR   := mkdir -p $(OUTDIR)
-    RM      := rm -rf $(OUTDIR)
+    MKDIR    := mkdir -p $(OUTDIR)
+    RM       := rm -rf $(OUTDIR)
 endif
 
 SOURCES  := \
@@ -78,8 +78,11 @@ $(TARGET): $(SOURCES)
 	$(CXX) $(CXXFLAGS) $(IFLAGS) $(SOURCES) -o $(TARGET)
 	@echo "Build successful: $(TARGET)"
 
-test: $(TEST_BIN)
+$(TEST_BIN): $(TEST_SOURCES)
+	@$(MKDIR)
 	$(CXX) $(CXXFLAGS) $(IFLAGS) $(TEST_SOURCES) -o $(TEST_BIN)
+
+test: $(TEST_BIN)
 	@echo "Running tests..."
 	./$(TEST_BIN)
 
