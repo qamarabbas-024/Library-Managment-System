@@ -45,10 +45,10 @@ void LibraryApp::run() {
             case 0:
                 Terminal::clear();
                 std::cout << Color::Cyan << Color::Bold;
-                std::cout << "\n  ╔═══════════════════════════════════════════════════╗\n";
-                std::cout <<   "  ║        Thank you for using LMS v2.0               ║\n";
-                std::cout <<   "  ║        Developed by Qamar Abbas                   ║\n";
-                std::cout <<   "  ╚═══════════════════════════════════════════════════╝\n";
+                std::cout << "\n  +===================================================+\n";
+                std::cout <<   "  |        Thank you for using LMS v2.0               |\n";
+                std::cout <<   "  |        Developed by Qamar Abbas                   |\n";
+                std::cout <<   "  +===================================================+\n";
                 std::cout << Color::Reset << "\n";
                 return;
         }

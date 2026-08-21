@@ -15,6 +15,10 @@ namespace LMS::Utils {
 
 void Terminal::init() {
 #ifdef _WIN32
+    // Enable UTF-8 code page for Windows console
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+
     // Enable ANSI escape sequences in Windows console
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
     if (hOut != INVALID_HANDLE_VALUE) {
