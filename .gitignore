@@ -1,0 +1,30 @@
+# Binaries and compiled output
+*.exe
+*.o
+*.obj
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+
+# Build directories
+build/
+bin/
+out/
+dist/
+target/
+
+# IDE and Editor configs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+scratch/
+tmp/
