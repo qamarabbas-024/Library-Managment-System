@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-and-test:
-    name: Build & Test (Ubuntu & Windows)
+    name: Build & Test (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -33,10 +33,7 @@ jobs:
       - name: Build and Run Unit Tests (Linux)
         if: runner.os == 'Linux'
         run: |
-          g++ -std=c++20 -Wall -Wextra -O2 -Iinclude \
-            src/utils/*.cpp src/models/*.cpp src/storage/*.cpp src/services/*.cpp \
-            tests/test_runner.cpp -o build/test_runner
-          ./build/test_runner
+          make test
 
       - name: Build Application (Windows)
         if: runner.os == 'Windows'
@@ -54,6 +51,7 @@ jobs:
             src\utils\StringUtils.cpp ^
             src\utils\Terminal.cpp ^
             src\utils\TableFormatter.cpp ^
+            src\utils\Barcode.cpp ^
             src\models\Book.cpp ^
             src\models\User.cpp ^
             src\models\Loan.cpp ^
@@ -69,5 +67,7 @@ jobs:
             src\services\MemberService.cpp ^
             src\services\CirculationService.cpp ^
             src\services\ReportService.cpp ^
+            src\services\ReceiptService.cpp ^
+            src\services\RecommendationService.cpp ^
             tests\test_runner.cpp -o build\test_runner.exe
           build\test_runner.exe
