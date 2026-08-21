@@ -1,4 +1,8 @@
-# Binaries and compiled output
+# ===================================================
+# Library Management System - C++ Project .gitignore
+# ===================================================
+
+# Compiled C++ binaries & object files
 *.exe
 *.o
 *.obj
@@ -8,14 +12,14 @@
 *.a
 *.lib
 
-# Build directories
+# Build output directories
 build/
 bin/
 out/
 dist/
 target/
 
-# IDE and Editor configs
+# IDE and Editor files
 .vscode/
 .idea/
 *.swp
@@ -24,7 +28,12 @@ target/
 .DS_Store
 Thumbs.db
 
-# Logs and temporary files
-*.log
+# Runtime log files (generated at runtime, not source)
+logs/
+
+# Temporary/scratch files
 scratch/
 tmp/
+
+# NOTE: data/*.csv files are the project's flat-file storage.
+#       They are intentionally tracked in git as part of the project.

@@ -1,101 +1,40 @@
-001,Atomic Habit,James Clear,Personal Development,2018,2
-002,The 7 Habits of Highly Effective People,Stephen R. Covey,Self-help,1989,3
-003,Rich Dad Poor Dad,Robert Kiyosaki,Personal Finance,1997,4
-004,Think and Grow Rich,Napoleon Hill,Self-help,1937,2
-005,Deep Work,Cal Newport,Productivity,2016,5
-006,The Power of Habit,Charles Duhigg,Self-help,2012,3
-007,How to Win Friends and Influence People,Dale Carnegie,Self-help,1936,4
-008,Man's Search for Meaning,Viktor E. Frankl,Psychology,1946,2
-009,The Alchemist,Paulo Coelho,Fiction,1988,5
-010,To Kill a Mockingbird,Harper Lee,Fiction,1960,3
-011,1984,George Orwell,Fiction,1949,4
-012,Animal Farm,George Orwell,Fiction,1945,2
-013,Sapiens,Yuval Noah Harari,History,2011,5
-014,Homo Deus,Yuval Noah Harari,History,2015,3
-015,The Subtle Art of Not Giving a F*ck,Mark Manson,Self-help,2016,4
-016,Start With Why,Simon Sinek,Business,2009,3
-017,Zero to One,Peter Thiel,Business,2014,2
-018,The Lean Startup,Eric Ries,Business,2011,5
-019,Thinking Fast and Slow,Daniel Kahneman,Psychology,2011,3
-020,Grit,Angela Duckworth,Psychology,2016,4
-021,The Catcher in the Rye,J.D. Salinger,Fiction,1951,2
-022,Harry Potter and the Sorcerer's Stone,J.K. Rowling,Fantasy,1997,5
-023,Harry Potter and the Chamber of Secrets,J.K. Rowling,Fantasy,1998,4
-024,The Hobbit,J.R.R. Tolkien,Fantasy,1937,3
-025,The Lord of the Rings,J.R.R. Tolkien,Fantasy,1954,2
-026,A Game of Thrones,George R. R. Martin,Fantasy,1996,5
-027,The Great Gatsby,F. Scott Fitzgerald,Fiction,1925,3
-028,The Kite Runner,Khaled Hosseini,Fiction,2003,4
-029,The Da Vinci Code,Dan Brown,Thriller,2003,2
-030,Angels and Demons,Dan Brown,Thriller,2000,3
-031,The Shining,Stephen King,Horror,1977,4
-032,It,Stephen King,Horror,1986,2
-033,The Road,Cormac McCarthy,Fiction,2006,3
-034,Life of Pi,Yann Martel,Fiction,2001,5
-035,The Fault in Our Stars,John Green,Fiction,2012,4
-036,The Hunger Games,Suzanne Collins,Dystopian,2008,3
-037,Divergent,Veronica Roth,Dystopian,2011,2
-038,The Girl with the Dragon Tattoo,Stieg Larsson,Crime,2005,4
-039,The Book Thief,Markus Zusak,Fiction,2005,5
-040,Educated,Tara Westover,Memoir,2018,3
-041,Becoming,Michelle Obama,Memoir,2018,4
-042,Steve Jobs,Walter Isaacson,Biography,2011,2
-043,Elon Musk,Walter Isaacson,Biography,2023,3
-044,The Art of War,Sun Tzu,Strategy,5,2
-045,Clean Code,Robert C. Martin,Programming,2008,5
-046,The Pragmatic Programmer,Andrew Hunt,Programming,1999,4
-047,Introduction to Algorithms,Thomas H. Cormen,CS,2009,3
-048,Design Patterns,Erich Gamma,Programming,1994,2
-049,Head First Java,Kathy Sierra,Programming,2003,5
-050,Effective Java,Joshua Bloch,Programming,2008,4
-051,Python Crash Course,Eric Matthes,Programming,2016,3
-052,Automate the Boring Stuff with Python,Al Sweigart,Programming,2015,2
-053,You Don't Know JS,Kyle Simpson,Programming,2014,4
-054,Cracking the Coding Interview,Gayle Laakmann McDowell,CS,2015,5
-055,Computer Networking: A Top-Down Approach,James Kurose,CS,2016,3
-056,Operating System Concepts,Abraham Silberschatz,CS,2018,4
-057,Database System Concepts,Abraham Silberschatz,CS,2019,2
-058,Artificial Intelligence: A Modern Approach,Stuart Russell,AI,2020,5
-059,Hands-On Machine Learning,Aurélien Géron,AI,2019,4
-060,Deep Learning,Ian Goodfellow,AI,2016,3
-061,The C Programming Language,Dennis Ritchie,Programming,1988,2
-062,C++ Primer,Stanley Lippman,Programming,2012,4
-063,Let Us C,Yashavant Kanetkar,Programming,2004,5
-064,Structure and Interpretation of Computer Programs,Harold Abelson,CS,1996,3
-065,The Mythical Man-Month,Fred Brooks,Software Engineering,1995,2
-066,Code Complete,Steve McConnell,Programming,2004,4
-067,Refactoring,Martin Fowler,Programming,1999,5
-068,The Clean Coder,Robert C. Martin,Programming,2011,3
-069,Algorithms,Robert Sedgewick,CS,2011,4
-070,The Phoenix Project,Gene Kim,IT,2013,2
-071,The Psychology of Money,Morgan Housel,Finance,2020,5
-072,I Will Teach You to Be Rich,Ramit Sethi,Finance,2009,3
-073,A Brief History of Time,Stephen Hawking,Science,1988,4
-074,The Theory of Everything,Stephen Hawking,Science,2002,2
-075,Silent Spring,Rachel Carson,Environment,1962,3
-076,Guns Germs and Steel,Jared Diamond,History,1997,4
-077,The Wright Brothers,David McCullough,History,2015,2
-078,The Diary of a Young Girl,Anne Frank,History,1947,5
-079,Long Walk to Freedom,Nelson Mandela,Biography,1994,3
-080,The Art of Happiness,Dalai Lama,Philosophy,1998,4
-081,Meditations,Marcus Aurelius,Philosophy,180,2
-082,Ikigai,Héctor García,Self-help,2016,5
-083,Can't Hurt Me,David Goggins,Motivation,2018,4
-084,The 4-Hour Workweek,Timothy Ferriss,Business,2007,3
-085,Rework,Jason Fried,Business,2010,2
-086,The Millionaire Fastlane,MJ DeMarco,Finance,2011,4
-087,Who Moved My Cheese?,Spencer Johnson,Self-help,1998,5
-088,The Compound Effect,Darren Hardy,Self-help,2010,3
-089,The Secret,Rhonda Byrne,Self-help,2006,2
-090,Good to Great,Jim Collins,Business,2001,4
-091,Outliers,Malcolm Gladwell,Psychology,2008,5
-092,The Tipping Point,Malcolm Gladwell,Psychology,2000,3
-093,Freakonomics,Steven Levitt,Economics,2005,4
-094,The Intelligent Investor,Benjamin Graham,Finance,1949,2
-095,The Richest Man in Babylon,George S. Clason,Finance,1926,3
-096,The Old Man and the Sea,Ernest Hemingway,Fiction,1952,4
-097,Of Mice and Men,John Steinbeck,Fiction,1937,2
-098,Brave New World,Aldous Huxley,Fiction,1932,3
-099,The Handmaid's Tale,Margaret Atwood,Fiction,1985,4
-100,The Road to Character,David Brooks,Philosophy,2015,2
-101,The Midnight Library,Matt Haig,Fiction,2020,5
+BK-001,ISBN-978-0735211292,Atomic Habits,James Clear,Self-Help,2018,Aisle A-1,5,5,0
+BK-002,ISBN-978-1451639612,The 7 Habits of Highly Effective People,Stephen R. Covey,Self-Help,1989,Aisle A-1,4,4,0
+BK-003,ISBN-978-1612680194,Rich Dad Poor Dad,Robert Kiyosaki,Personal Finance,1997,Aisle B-2,5,5,0
+BK-004,ISBN-978-1585424337,Think and Grow Rich,Napoleon Hill,Self-Help,1937,Aisle A-1,3,3,0
+BK-005,ISBN-978-1455586691,Deep Work,Cal Newport,Productivity,2016,Aisle C-3,5,5,0
+BK-006,ISBN-978-0812981605,The Power of Habit,Charles Duhigg,Psychology,2012,Aisle D-4,4,4,0
+BK-007,ISBN-978-0671027032,How to Win Friends and Influence People,Dale Carnegie,Self-Help,1936,Aisle A-1,5,5,0
+BK-008,ISBN-978-0807014295,Man's Search for Meaning,Viktor E. Frankl,Psychology,1946,Aisle D-4,3,3,0
+BK-009,ISBN-978-0062315007,The Alchemist,Paulo Coelho,Fiction,1988,Aisle E-5,6,6,0
+BK-010,ISBN-978-0061743528,To Kill a Mockingbird,Harper Lee,Fiction,1960,Aisle E-5,4,4,0
+BK-011,ISBN-978-0451524935,1984,George Orwell,Fiction,1949,Aisle E-5,5,5,0
+BK-012,ISBN-978-0451526342,Animal Farm,George Orwell,Fiction,1945,Aisle E-5,3,3,0
+BK-013,ISBN-978-0062316097,Sapiens: A Brief History of Humankind,Yuval Noah Harari,History,2011,Aisle F-6,6,6,0
+BK-014,ISBN-978-0062464316,Homo Deus,Yuval Noah Harari,History,2015,Aisle F-6,4,4,0
+BK-015,ISBN-978-0062457714,The Subtle Art of Not Giving a F*ck,Mark Manson,Self-Help,2016,Aisle A-1,5,5,0
+BK-016,ISBN-978-1591846444,Start With Why,Simon Sinek,Business,2009,Aisle B-2,4,4,0
+BK-017,ISBN-978-0804139021,Zero to One,Peter Thiel,Business,2014,Aisle B-2,3,3,0
+BK-018,ISBN-978-0307887894,The Lean Startup,Eric Ries,Business,2011,Aisle B-2,5,5,0
+BK-019,ISBN-978-0374533557,Thinking Fast and Slow,Daniel Kahneman,Psychology,2011,Aisle D-4,4,4,0
+BK-020,ISBN-978-1501111105,Grit,Angela Duckworth,Psychology,2016,Aisle D-4,3,3,0
+BK-021,ISBN-978-0316769488,The Catcher in the Rye,J.D. Salinger,Fiction,1951,Aisle E-5,3,3,0
+BK-022,ISBN-978-0439708180,Harry Potter and the Sorcerer's Stone,J.K. Rowling,Fantasy,1997,Aisle G-7,6,6,0
+BK-023,ISBN-978-0439064873,Harry Potter and the Chamber of Secrets,J.K. Rowling,Fantasy,1998,Aisle G-7,5,5,0
+BK-024,ISBN-978-0547928227,The Hobbit,J.R.R. Tolkien,Fantasy,1937,Aisle G-7,4,4,0
+BK-025,ISBN-978-0618640157,The Lord of the Rings,J.R.R. Tolkien,Fantasy,1954,Aisle G-7,3,3,0
+BK-026,ISBN-978-0679720201,Crime and Punishment,Fyodor Dostoevsky,Classic Literature,1866,Aisle H-8,3,3,0
+BK-027,ISBN-978-0141439518,Pride and Prejudice,Jane Austen,Classic Literature,1813,Aisle H-8,4,4,0
+BK-028,ISBN-978-0743273565,The Great Gatsby,F. Scott Fitzgerald,Classic Literature,1925,Aisle H-8,4,4,0
+BK-029,ISBN-978-0062409850,Brief History of Time,Stephen Hawking,Science,1988,Aisle I-9,3,3,0
+BK-030,ISBN-978-0393347951,The Gene: An Intimate History,Siddhartha Mukherjee,Science,2016,Aisle I-9,2,2,0
+BK-031,ISBN-978-0316346627,Educated,Tara Westover,Memoir,2018,Aisle J-10,4,4,0
+BK-032,ISBN-978-0812993547,Thinking in Systems,Donella H. Meadows,Systems,2008,Aisle C-3,3,3,0
+BK-033,ISBN-978-0525559474,The Pragmatic Programmer,David Thomas,Computer Science,2019,Aisle K-11,4,4,0
+BK-034,ISBN-978-0201633610,Design Patterns: GoF,Gang of Four,Computer Science,1994,Aisle K-11,3,3,0
+BK-035,ISBN-978-0136083238,Clean Code,Robert C. Martin,Computer Science,2008,Aisle K-11,4,4,0
+BK-036,ISBN-978-0201485677,The Mythical Man-Month,Frederick P. Brooks,Computer Science,1975,Aisle K-11,2,2,0
+BK-037,ISBN-978-0062361806,The Innovators,Walter Isaacson,Technology,2014,Aisle L-12,3,3,0
+BK-038,ISBN-978-0812977462,Guns Germs and Steel,Jared Diamond,History,1997,Aisle F-6,3,3,0
+BK-039,ISBN-978-0062316110,21 Lessons for the 21st Century,Yuval Noah Harari,Non-Fiction,2018,Aisle F-6,4,4,0
+BK-040,ISBN-978-1250301697,The Psychology of Money,Morgan Housel,Personal Finance,2020,Aisle B-2,5,5,0
